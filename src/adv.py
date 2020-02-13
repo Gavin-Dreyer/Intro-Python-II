@@ -74,63 +74,92 @@ p.inventory.append(item_select)
 
 def move():
     print(Player(new_player, location))
-    add_item()
-
-
-def add_item():
     if len(location.items) > 0 and location.items[0].name not in p.inventory:
         location.current_items()
-        cmd = input('Do you want to add item to inventory? y/n ')
-        if cmd == 'y':
-            p.inventory.append(location.items[0].name)
-            print(f'{location.items[0].name} added to inventory')
+
+
+# adds item to inventory and removes it from the room
+def add_item(new_item):
+    if len(location.items) > 0 and new_item not in p.inventory:
+        p.inventory.append(new_item)
+        print(f'{new_item} added to inventory')
+        location.items.remove(item[new_item])
+
+
+# removes desired item from inventory and adds it to the room
+def drop_item(dropped_item):
+    print(Player(new_player, location))
+    p.inventory = [items for items in p.inventory if items != dropped_item]
+    location.items.append(item[dropped_item])
+    location.current_items()
 
 
 while True:
     choice = input('Select direction or press i for inventory: ')
 
-    if choice == 'n':
-        try:
-            hasattr(location, 'n_to') == False
-            location = location.n_to
-        except AttributeError:
-            print("Please enter a valid direction")
-            continue
+    if len(choice) > 1:
+        choice = choice.split()
 
-        move()
+        if choice[0] == 'get':
+            try:
+                if choice[0] == 'get' and item[choice[1]] in location.items:
+                    add_item(choice[1])
+                else:
+                    print('Please enter an item you currently in the room')
+            except IndexError:
+                print('Please enter a valid item you wish to add to your inventory')
+        else:
+            try:
+                if choice[0] == 'drop' and choice[1] in p.inventory:
+                    drop_item(choice[1])
+                else:
+                    print('Please enter an item you currently have in your inventory')
+            except IndexError:
+                print('Please enter a valid item you wish to remove from your inventory')
 
-    if choice == 's':
-        try:
-            hasattr(location, 's_to') == False
-            location = location.s_to
-        except AttributeError:
-            print("Please enter a valid direction")
-            continue
+    else:
+        if choice == 'n':
+            try:
+                hasattr(location, 'n_to') == False
+                location = location.n_to
+            except AttributeError:
+                print("Please enter a valid direction")
+                continue
 
-        move()
+            move()
 
-    if choice == 'e':
-        try:
-            hasattr(location, 'e_to') == False
-            location = location.e_to
-        except AttributeError:
-            print("Please enter a valid direction")
-            continue
+        if choice == 's':
+            try:
+                hasattr(location, 's_to') == False
+                location = location.s_to
+            except AttributeError:
+                print("Please enter a valid direction")
+                continue
 
-        move()
+            move()
 
-    if choice == 'w':
-        try:
-            hasattr(location, 'w_to') == False
-            location = location.w_to
-        except AttributeError:
-            print("Please enter a valid direction")
-            continue
+        if choice == 'e':
+            try:
+                hasattr(location, 'e_to') == False
+                location = location.e_to
+            except AttributeError:
+                print("Please enter a valid direction")
+                continue
 
-        move()
+            move()
 
-    if choice == 'i':
-        p.current_inventory()
+        if choice == 'w':
+            try:
+                hasattr(location, 'w_to') == False
+                location = location.w_to
+            except AttributeError:
+                print("Please enter a valid direction")
+                continue
 
-    if choice == 'q':
-        break
+            move()
+
+        if choice == 'i':
+            p.current_inventory()
+
+        if choice == 'q':
+            break
