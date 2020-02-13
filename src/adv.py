@@ -41,34 +41,49 @@ item = {
     'wand': Item('wand', 'ranged weapon with weak damage, but increases player\'s spell power'),
     'sword': Item('sword', 'close range combat weapon with high damage'),
     'bow': Item('bow', 'ranged weapon with high damage'),
-    'potion': Item('potion', 'restores hp')
+    'potion': Item('potion', 'item that restores hp'),
+    'jar': Item('jar', 'item useful for storing liquids')
 }
 
 room['outside'].items.append(item['wand'])
 room['outside'].items.append(item['sword'])
 room['outside'].items.append(item['bow'])
+room['overlook'].items.append(item['potion'])
+room['narrow'].items.append(item['jar'])
 
-
-# new_player = input('Please enter a name: ')
+new_player = input('Please enter a name: ')
 
 start = room['outside']
+
 location = start
 
-p = Player('joe', start)
+p = Player(new_player, start)
 
 print(p)
+
 room['outside'].current_items()
 
 item_select = input('\nWhat is your weapon of choice? ')
 
 while room['outside'].check_item(item_select) == 0:
+    room['outside'].current_items()
     item_select = input('\nWhat is your weapon of choice? ')
 
 p.inventory.append(item_select)
 
 
 def move():
-    print(Player('Joe', location))
+    print(Player(new_player, location))
+    add_item()
+
+
+def add_item():
+    if len(location.items) > 0 and location.items[0].name not in p.inventory:
+        location.current_items()
+        cmd = input('Do you want to add item to inventory? y/n ')
+        if cmd == 'y':
+            p.inventory.append(location.items[0].name)
+            print(f'{location.items[0].name} added to inventory')
 
 
 while True:

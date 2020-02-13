@@ -17,14 +17,15 @@ class Room:
             print(
                 f'{self.items[i].name}:  {self.items[i].name} is a {self.items[i].description}')
 
+    # checking to see if the user put in the correct input
     def check_item(self, item):
         count = 0
         for i in range(len(self.items)):
             if item == self.items[i].name:
                 count += 1
         if count > 0:
-            print('Added to inventory\n')
+            print(f'\n{item} was added to inventory\n')
             return 1
         else:
-            print('\nPlease select a valid option')
+            print('\nPlease select a valid option\n')
             return 0
