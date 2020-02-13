@@ -71,6 +71,8 @@ while room['outside'].check_item(item_select) == 0:
 
 p.inventory.append(item_select)
 
+print('If you see an item type get \'item\' to add to inventory and drop \'item\' to remove from inventory')
+
 
 def move():
     print(Player(new_player, location))
