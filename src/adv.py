@@ -1,5 +1,6 @@
 from room import Room
 from player import Player
+from item import Item
 
 # Declare all the rooms
 
@@ -34,32 +35,36 @@ room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
-#
-# Main
-#
+# Items
+
+item = {
+    'wand': Item('wand', 'ranged weapon with weak damage, but increases player\'s spell power'),
+    'sword': Item('sword', 'close range combat weapon with high damage'),
+    'bow': Item('bow', 'ranged weapon with high damage'),
+    'potion': Item('potion', 'restores hp')
+}
+
+room['outside'].items.append(item['wand'])
+room['outside'].items.append(item['sword'])
+room['outside'].items.append(item['bow'])
 
 
-# Make a new player object that is currently in the 'outside' room.
-
-# Write a loop that:
-#
-# * Prints the current room name
-# * Prints the current description (the textwrap module might be useful here).
-# * Waits for user input and decides what to do.
-#
-# If the user enters a cardinal direction, attempt to move to the room there.
-# Print an error message if the movement isn't allowed.
-#
-# If the user enters "q", quit the game.
-
-new_player = input('Please enter a name: ')
+# new_player = input('Please enter a name: ')
 
 start = room['outside']
 location = start
 
-p = Player(new_player, start)
+p = Player('joe', start)
 
 print(p)
+room['outside'].current_items()
+
+item_select = input('\nWhat is your weapon of choice? ')
+
+while room['outside'].check_item(item_select) == 0:
+    item_select = input('\nWhat is your weapon of choice? ')
+
+p.inventory.append(item_select)
 
 
 def move():
@@ -67,7 +72,7 @@ def move():
 
 
 while True:
-    choice = input('Select direction: ')
+    choice = input('Select direction or press i for inventory: ')
 
     if choice == 'n':
         try:
@@ -108,6 +113,9 @@ while True:
             continue
 
         move()
+
+    if choice == 'i':
+        p.current_inventory()
 
     if choice == 'q':
         break
